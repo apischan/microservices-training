@@ -8,7 +8,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class RandomWordController {
 
-    @Value("${words}") String words;
+//    @Value("${words}")
+    String words = "icicle,refrigerator,blizzard,snowball";
 
     @RequestMapping("/")
     public @ResponseBody String getWord() {
