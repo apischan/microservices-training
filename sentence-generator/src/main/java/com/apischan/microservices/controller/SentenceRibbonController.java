@@ -12,11 +12,11 @@ import java.net.URI;
 import java.util.StringJoiner;
 
 @RestController
-public class SentenceFeignController {
+public class SentenceRibbonController {
     private LoadBalancerClient client;
 
     @Autowired
-    public SentenceFeignController(LoadBalancerClient client) {
+    public SentenceRibbonController(LoadBalancerClient client) {
         this.client = client;
     }
 

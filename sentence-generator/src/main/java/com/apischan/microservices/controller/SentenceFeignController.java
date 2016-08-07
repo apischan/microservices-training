@@ -1,5 +1,6 @@
 package com.apischan.microservices.controller;
 
+import com.apischan.microservices.service.SentenceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.loadbalancer.LoadBalancerClient;
@@ -13,34 +14,17 @@ import java.util.StringJoiner;
 
 @RestController
 public class SentenceFeignController {
-    private LoadBalancerClient client;
+    private SentenceService sentenceService;
 
     @Autowired
-    public SentenceFeignController(LoadBalancerClient client) {
-        this.client = client;
+    public SentenceFeignController(SentenceService sentenceService) {
+        this.sentenceService = sentenceService;
     }
 
-    @RequestMapping("/sentenceOld")
+    @RequestMapping("/sentence")
     public @ResponseBody
     String getSentence() {
-        StringJoiner stringJoiner = new StringJoiner(" ");
-        stringJoiner.add(getWord("SUBJECT-GENERATOR"))
-                .add(getWord("VERB-GENERATOR"))
-                .add(getWord("ARTICLE-GENERATOR"))
-                .add(getWord("ADJECTIVE-GENERATOR"))
-                .add(getWord("NOUN-GENERATOR"));
-        return stringJoiner.toString();
+        return sentenceService.buildSentence();
     }
 
-    private String getWord(String service) {
-        ServiceInstance serviceInstance = client.choose(service);
-        if (serviceInstance != null) {
-            URI uri = serviceInstance.getUri();
-            if (uri != null) {
-                return new RestTemplate()
-                        .getForObject(uri,String.class);
-            }
-        }
-        return null;
-    }
 }
