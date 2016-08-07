@@ -20,7 +20,7 @@ public class SentenceFeignController {
         this.client = client;
     }
 
-    @RequestMapping("/sentence")
+    @RequestMapping("/sentenceOld")
     public @ResponseBody
     String getSentence() {
         StringJoiner stringJoiner = new StringJoiner(" ");
