@@ -2,6 +2,7 @@ package com.apischan.microservices.service;
 
 import com.apischan.microservices.dao.*;
 import com.apischan.microservices.domain.Word;
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,7 +15,11 @@ public class WordServiceImpl implements WordService {
     private AdjectiveClient adjectiveClient;
     private NounClient nounClient;
 
+    public Word getSubjectFallBack() {
+        return new Word("Someone");
+    }
 
+    @HystrixCommand(fallbackMethod = "getSubjectFallback")
     @Override
     public Word getSubject() {
         return subjectClient.getWord();
@@ -30,11 +35,21 @@ public class WordServiceImpl implements WordService {
         return articleClient.getWord();
     }
 
+    public Word getAdjectiveFallback() {
+        return new Word("hello");
+    }
+
+    @HystrixCommand(fallbackMethod = "getAdjectiveFallback")
     @Override
     public Word getAdjective() {
         return adjectiveClient.getWord();
     }
 
+    public Word getNounFallBack() {
+        return new Word("somthing");
+    }
+
+    @HystrixCommand(fallbackMethod = "getNounFallBack")
     @Override
     public Word getNoun() {
         return nounClient.getWord();

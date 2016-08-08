@@ -7,7 +7,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = Lab4SentenceApplication.class)
+@SpringApplicationConfiguration(classes = SentenceGeneratorApplication.class)
 @WebAppConfiguration
 public class Lab4SentenceApplicationTests {
 

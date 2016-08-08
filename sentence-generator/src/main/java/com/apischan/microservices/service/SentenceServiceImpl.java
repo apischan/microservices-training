@@ -17,10 +17,10 @@ public class SentenceServiceImpl implements SentenceService {
 
     @Override
     public String buildSentence() {
-        return MessageFormat.format("{0} {1} {2} {3} {4}.",
-                wordService.getSubject().getWord(),
-                wordService.getVerb().getWord(),
-                wordService.getVerb().getWord(),
+        return MessageFormat.format("{0} {1} {2}",// {3} {4}.",
+//                wordService.getSubject().getWord(),
+//                wordService.getVerb().getWord(),
+                wordService.getArticle().getWord(),
                 wordService.getAdjective().getWord(),
                 wordService.getNoun().getWord()
         );
