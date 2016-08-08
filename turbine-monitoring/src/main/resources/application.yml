@@ -1,0 +1,13 @@
+---
+server:
+  port: 8030
+
+info:
+   component: Turbine
+
+turbine:
+  clusterNameExpression: new String("default")
+  appConfig: SENTENCE-GENERATOR #sentence,subject,verb,article,adjective,noun
+
+management:
+  port: 8990
