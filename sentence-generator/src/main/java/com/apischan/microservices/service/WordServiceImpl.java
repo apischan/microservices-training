@@ -15,28 +15,22 @@ public class WordServiceImpl implements WordService {
     private AdjectiveClient adjectiveClient;
     private NounClient nounClient;
 
-    public Word getSubjectFallBack() {
-        return new Word("Someone");
-    }
-
     @HystrixCommand(fallbackMethod = "getSubjectFallback")
     @Override
     public Word getSubject() {
         return subjectClient.getWord();
     }
 
+    @HystrixCommand(fallbackMethod = "getVerbFallBack")
     @Override
     public Word getVerb() {
         return verbClient.getWord();
     }
 
+    @HystrixCommand(fallbackMethod = "getArticleFallback")
     @Override
     public Word getArticle() {
         return articleClient.getWord();
-    }
-
-    public Word getAdjectiveFallback() {
-        return new Word("hello");
     }
 
     @HystrixCommand(fallbackMethod = "getAdjectiveFallback")
@@ -45,15 +39,35 @@ public class WordServiceImpl implements WordService {
         return adjectiveClient.getWord();
     }
 
-    public Word getNounFallBack() {
-        return new Word("somthing");
-    }
-
-    @HystrixCommand(fallbackMethod = "getNounFallBack")
+    @HystrixCommand(fallbackMethod = "getNounFallback")
     @Override
     public Word getNoun() {
         return nounClient.getWord();
     }
+
+    //---------------fallbacks-------------------------------------
+
+    public Word getSubjectFallBack() {
+        return new Word("Someone");
+    }
+
+    public Word getVerbFallBack() {
+        return new Word("do");
+    }
+
+    public Word getArticleFallback() {
+        return new Word("");
+    }
+
+    public Word getAdjectiveFallback() {
+        return new Word("hello");
+    }
+
+    public Word getNounFallback() {
+        return new Word("somthing");
+    }
+
+    //-----------------autowirings------------------------------
 
     @Autowired
     public void setVerbClient(VerbClient verbClient) {
