@@ -2,19 +2,23 @@ package com.apischan.microservices.dao;
 
 import com.apischan.microservices.domain.Word;
 import org.springframework.cloud.netflix.feign.FeignClient;
+import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import static com.apischan.microservices.domain.Word.*;
-
-@FeignClient("noun-generator")
-public interface NounClient extends WordClient {
+@FeignClient(name = "noun-generator", fallback = NounClient.NounClientFallback.class)
+public interface NounClient {
 
     @RequestMapping(method = RequestMethod.GET, value = "/")
-    Word getWord();
+    Word getNoun();
 
-//    @Override
-//    default Word getFallback() {
-//        return new Word("something", Role.NOUN);
-//    }
+    @Component
+    class NounClientFallback implements NounClient {
+
+        @Override
+        public Word getNoun() {
+            return new Word("something", Word.Role.NOUN);
+        }
+    }
 }
+

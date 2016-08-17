@@ -24,28 +24,19 @@ public class SentenceServiceImpl implements SentenceService {
     @Override
     public String buildSentence() {
         Sentence sentence = new Sentence();
-        sentence.addWord(wordService.getSubject());
-        sentence.addWord(wordService.getVerb());
-        sentence.addWord(wordService.getArticle());
-        sentence.addWord(wordService.getAdjective());
-        sentence.addWord(wordService.getNoun());
-        return sentence.toString();
+        Collection<Observable<Word>> observables = createObservables();
+        CountDownLatch countDownLatch = new CountDownLatch(observables.size());
+        Observable.merge(observables)
+                .subscribe(
+                        (word) -> {
+                            sentence.addWord(word);
+                            countDownLatch.countDown();
+                        }
+                );
 
-        //-----------------------------------------------
-//        Sentence sentence = new Sentence();
-//        Collection<Observable<Word>> observables = createObservables();
-//        CountDownLatch countDownLatch = new CountDownLatch(observables.size());
-//        Observable.merge(observables)
-//                .subscribe(
-//                        (word) -> {
-//                            sentence.addWord(word);
-//                            countDownLatch.countDown();
-//                        }
-//                );
-//
-//        waitForAll(countDownLatch);
-//
-//        return sentence.toString();
+        waitForAll(countDownLatch);
+
+        return sentence.toString();
 
     }
 
@@ -57,15 +48,15 @@ public class SentenceServiceImpl implements SentenceService {
         }
     }
 
-//    private Collection<Observable<Word>> createObservables() {
-//        return Collections.unmodifiableCollection(Arrays.asList(
-//                wordService.getSubject(),
-//                wordService.getVerb(),
-//                wordService.getArticle(),
-//                wordService.getAdjective(),
-//                wordService.getNoun()
-//        ));
-//    }
+    private Collection<Observable<Word>> createObservables() {
+        return Collections.unmodifiableCollection(Arrays.asList(
+                wordService.getSubject(),
+                wordService.getVerb(),
+                wordService.getArticle(),
+                wordService.getAdjective(),
+                wordService.getNoun()
+        ));
+    }
 
     @Autowired
     public void setWordService(WordService wordService) {
